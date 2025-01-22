@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<modelVersion>4.0.0</modelVersion>
+<groupId>ai.djl.tensorflow</groupId>
+<artifactId>tensorflow-api</artifactId>
+<version>0.31.0</version>
+<name>DJL release for TensorFlow core api</name>
+<description>Deep Java Library (DJL) release for TensorFlow core api</description>
+<url>http://www.djl.ai/engines/tensorflow/tensorflow-api</url>
+<licenses>
+<license>
+<name>The Apache License, Version 2.0</name>
+<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+</license>
+</licenses>
+<developers>
+<developer>
+<name>DJL.AI Team</name>
+<email>djl-dev@amazon.com</email>
+<organization>Amazon AI</organization>
+<organizationUrl>https://amazon.com</organizationUrl>
+</developer>
+</developers>
+<scm>
+<connection>scm:git:git@github.com:deepjavalibrary/djl.git</connection>
+<developerConnection>scm:git:git@github.com:deepjavalibrary/djl.git</developerConnection>
+<url>https://github.com/deepjavalibrary/djl</url>
+</scm>
+<dependencies>
+<dependency>
+<groupId>org.bytedeco</groupId>
+<artifactId>javacpp</artifactId>
+<version>1.5.10</version>
+<scope>compile</scope>
+</dependency>
+<dependency>
+<groupId>com.google.protobuf</groupId>
+<artifactId>protobuf-java</artifactId>
+<version>3.25.5</version>
+<scope>compile</scope>
+</dependency>
+</dependencies>
+</project>
