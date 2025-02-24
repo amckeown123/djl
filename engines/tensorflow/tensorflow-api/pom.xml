@@ -1,8 +1,9 @@
+<!-- https://mvnrepository.com/artifact/ai.djl.tensorflow/tensorflow-api -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 <modelVersion>4.0.0</modelVersion>
 <groupId>ai.djl.tensorflow</groupId>
 <artifactId>tensorflow-api</artifactId>
-<version>0.31.0</version>
+<version>0.32.0</version>
 <name>DJL release for TensorFlow core api</name>
 <description>Deep Java Library (DJL) release for TensorFlow core api</description>
 <url>http://www.djl.ai/engines/tensorflow/tensorflow-api</url>
