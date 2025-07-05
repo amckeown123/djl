@@ -8,7 +8,7 @@
 <groupId>ai.djl.android</groupId>
 <artifactId>core</artifactId>
 <version>0.30.0</version>
-<packaging>aar</packaging>
+<packaging>jar</packaging>
 <name>DJL Android core library</name>
 <description>DJL Android core library distribution</description>
 <url>http://www.djl.ai/android</url>
