@@ -1,0 +1,27 @@
+{
+  "metadataVersion": "0.2",
+  "resourceType": "dataset",
+  "application": "nlp",
+  "groupId": "ai.djl.basicdataset",
+  "artifactId": "amazon_reviews",
+  "name": "amazon_reviews",
+  "description": "A sentiment analysis dataset of Amazon reviews",
+  "website": "https://s3.amazonaws.com/amazon-reviews-pds/readme.html",
+  "artifacts": [
+    {
+      "version": "1.0",
+      "snapshot": false,
+      "name": "amazon_reviews_us_Digital_Software",
+      "properties": {
+        "dataset": "us_Digital_Software"
+      },
+      "files": {
+        "amazon_reviews": {
+          "uri": "1.0/amazon_reviews_us_Digital_Software_v1_00.tsv.gz",
+          "sha1Hash": "098fb62c5731161dd1e10298a5d11636253609a1",
+          "size": 18997604
+        }
+      }
+    }
+  ]
+}

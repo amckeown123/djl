@@ -1,0 +1,8 @@
+huggingface-hub
+transformers
+sentence-transformers
+torch
+protobuf==4.25.8
+optimum[exporters]
+safetensors
+requests

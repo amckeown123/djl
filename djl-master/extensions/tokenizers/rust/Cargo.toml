@@ -1,0 +1,46 @@
+[package]
+name = "djl_tokenizer"
+version = "0.1.0"
+authors = ["Frank Liu <frankfliu2000@gmail.com>"]
+edition = "2021"
+
+[dependencies]
+jni = "0.21.1"
+candle = { version = "*", package = "candle-core" }
+candle-nn = "0.8.4"
+candle-transformers = "0.8.4"
+candle-flash-attn = { version = "0.8.4", optional = true }
+candle-cublaslt = { version = "0.0.1", optional = true }
+candle-layer-norm = { version = "0.0.1", optional = true }
+candle-rotary = { version = "0.0.1", optional = true }
+cudarc = { version = "0.13", features = ["cuda-12020", "static-linking"], default-features = false, optional = true }
+#intel-mkl-src = { version = "0.8", features = ["mkl-static-lp64-iomp"] }
+#candle-flash-attn-v1 = { version = "0.0.1", optional = true }
+
+tokenizers = "0.21.1"
+half = { version = "2.5.0", features = ["num-traits"] }
+tracing = "0.1.41"
+serde = { version = "1.0.219", features = ["serde_derive"] }
+serde_json = "1.0.140"
+
+[patch.crates-io]
+candle-layer-norm = { git = "https://github.com/frankfliu/candle-layer-norm", rev = "e82bb97605d815aedfa1835c38b0111bed2085b5" }
+cudarc = { git = "https://github.com/Narsil/cudarc", rev = "8b4f18b4bcd5e4b1a9daf40abc3a2e27f83f06e9" }
+candle = { git = "https://github.com/huggingface/candle", rev = "6381023982251959a2c9bab7378b3013304e192b", package = "candle-core" }
+candle-nn = { git = "https://github.com/huggingface/candle", rev = "6381023982251959a2c9bab7378b3013304e192b", package = "candle-nn" }
+candle-transformers = { git = "https://github.com/huggingface/candle", rev = "6381023982251959a2c9bab7378b3013304e192b", package = "candle-transformers" }
+candle-flash-attn = { git = "https://github.com/huggingface/candle", rev = "6381023982251959a2c9bab7378b3013304e192b", package = "candle-flash-attn" }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+openssl = { version = "0.10", features = ["vendored"] }
+
+[target.'cfg(not(target_os = "android"))'.dependencies]
+tokenizers = { version = "0.21.0", features = ["http"] }
+
+[lib]
+crate-type = ["cdylib"]
+
+[features]
+cuda = ["candle/cuda", "candle-nn/cuda", "candle-transformers/cuda", "dep:candle-cublaslt", "dep:candle-layer-norm", "dep:candle-rotary", "dep:cudarc"]
+flash-attn = ["cuda", "candle-transformers/flash-attn", "dep:candle-flash-attn"]
+

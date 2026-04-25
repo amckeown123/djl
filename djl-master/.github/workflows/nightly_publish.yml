@@ -1,0 +1,106 @@
+name: Nightly Publish
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'staging/snapshot, default is snapshot'
+        required: true
+        default: 'snapshot'
+
+jobs:
+  build:
+    if: github.repository == 'deepjavalibrary/djl'
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ macos-latest, ubuntu-latest, ubuntu-24.04-arm, windows-latest ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+      # Enable gradle cache: https://github.com/actions/cache/blob/master/examples.md#java---gradle
+      - uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('*/build.gradle.kts', 'engines/**/build.gradle.kts', 'extensions/**/build.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: check disk space
+        run: df -h
+      - name: install libomp on macos
+        if: ${{ runner.os == 'macOS' }}
+        run: brew install libomp
+      - name: Build with Gradle
+        run: ./gradlew -Dnightly=true build :jacoco:testCodeCoverageReport
+      - name: PyTorch integration test
+        run: ./gradlew :integration:clean :integration:test "-Dai.djl.default_engine=PyTorch"
+      - name: TensorFlow integration test
+        run: ./gradlew :integration:clean :integration:test "-Dai.djl.default_engine=TensorFlow"
+      - name: OnnxRuntime integration test
+        run: ./gradlew :integration:clean :integration:test "-Dai.djl.default_engine=OnnxRuntime"
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reports-${{ matrix.operating-system }}
+          path: |
+            ${{ github.workspace }}/**/build/reports/**/*
+            !${{ github.workspace }}/**/build/reports/jacoco/*
+
+  publish:
+    if: github.repository == 'deepjavalibrary/djl'
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: 17
+      # Enable gradle cache: https://github.com/actions/cache/blob/master/examples.md#java---gradle
+      - uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('*/build.gradle.kts', 'engines/**/build.gradle.kts', 'extensions/**/build.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Publish to snapshot repository
+        if: ${{ github.event.inputs.mode == '' || github.event.inputs.mode == 'snapshot' }}
+        # PT 1.13.1 is for PT 1.x support, and CUDA 11.x support
+        # PT 2.5.1 is for CUDA 12.4 support
+        run: |
+          ./gradlew clean engines:pytorch:pytorch-jni:publish -Ppt_version=1.13.1 -Psnapshot
+          ./gradlew clean engines:pytorch:pytorch-jni:publish -Ppt_version=2.5.1 -Psnapshot
+          ./gradlew clean engines:ml:xgboost:publish -Pgpu -Psnapshot
+          ./gradlew clean publish -Psnapshot
+          cd bom
+          ./gradlew publish -Psnapshot
+        env:
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_signingKey }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ORG_GRADLE_PROJECT_signingPassword }}
+          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_sonatypeUsername }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_sonatypePassword }}
+      - name: Publish to staging repository
+        if: ${{ github.event.inputs.mode == 'staging' }}
+        env:
+          MODE_INPUT: ${{ github.event.inputs.mode }}
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_signingKey }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ORG_GRADLE_PROJECT_signingPassword }}
+          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_sonatypeUsername }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_sonatypePassword }}
+        run: |
+          ./gradlew clean engines:pytorch:pytorch-jni:publish -Ppt_version=1.13.1 -P$MODE_INPUT
+          ./gradlew clean engines:pytorch:pytorch-jni:publish -Ppt_version=2.5.1 -P$MODE_INPUT
+          ./gradlew clean engines:ml:xgboost:publish -Pgpu -P$MODE_INPUT
+          ./gradlew clean publish -P$MODE_INPUT
+          cd bom
+          ./gradlew publish -P$MODE_INPUT

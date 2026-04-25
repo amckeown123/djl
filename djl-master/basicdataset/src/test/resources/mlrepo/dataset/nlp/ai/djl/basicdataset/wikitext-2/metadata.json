@@ -1,0 +1,31 @@
+{
+  "metadataVersion": "0.2",
+  "resourceType": "dataset",
+  "application": "nlp",
+  "groupId": "ai.djl.basicdataset",
+  "artifactId": "wikitext-2",
+  "name": "wikitext-2",
+  "description": "The WikiText language modeling dataset is a collection of over 100 million tokens extracted from the set of verified Good and Featured articles on Wikipedia.",
+  "website": "https://blog.salesforceairesearch.com/the-wikitext-long-term-dependency-language-modeling-dataset/",
+  "licenses": {
+    "license": {
+      "name": "Creative Commons Attribution-ShareAlike License",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License"
+    }
+  },
+  "artifacts": [
+    {
+      "version": "1.0",
+      "snapshot": false,
+      "name": "wikitext-2",
+      "files": {
+        "wikitext-2": {
+          "uri": "https://mlrepo.djl.ai/dataset/nlp/ai/djl/basicdataset/wikitext-2/1.0/wikitext-2-v1.zip",
+          "sha1Hash": "46965bdeca1d8165e688598752ca467bb5bee018",
+          "name": "",
+          "size": 4475596
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+no  no no  mammal black       4  80000 panther
+no  no no  mammal brown       4 100000 lion
+no  no yes mammal silver      0  80000 dolphin
+yes no no  mammal black/white 4 150000 zebra
+yes no no  mammal brown       4  80000 deer
+yes no no  bird   black/white 2  60000 ostrich
+no  no yes bird   black/white 2  60000 penguin

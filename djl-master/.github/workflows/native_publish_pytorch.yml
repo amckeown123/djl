@@ -1,0 +1,45 @@
+name: Native Publish PyTorch
+
+on:
+  workflow_dispatch:
+    inputs:
+        mode:
+          description: 'staging/snapshot, default is snapshot'
+          required: true
+          default: 'snapshot'
+        package_type:
+          description: 'cpu/gpu, default is cpu'
+          required: true
+          default: 'cpu'
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: 17
+      # Enable gradle cache: https://github.com/actions/cache/blob/master/examples.md#java---gradle
+      - uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('*/build.gradle.kts', 'engines/**/build.gradle.kts', 'extensions/**/build.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Download native binaries
+        env:
+          PACKAGE_TYPE_INPUT: ${{ inputs.package_type }}
+        run: ./gradlew :engines:pytorch:pytorch-native:dPTNL -Ppackage_type=$PACKAGE_TYPE_INPUT
+      - name: Publish to snapshot/staging repository
+        working-directory: engines/pytorch/pytorch-native
+        env:
+          MODE_INPUT: ${{ github.event.inputs.mode }}
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_signingKey }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ORG_GRADLE_PROJECT_signingPassword }}
+          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_sonatypeUsername }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_sonatypePassword }}
+        run: ./gradlew publish -P$MODE_INPUT

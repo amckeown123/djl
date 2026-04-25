@@ -1,0 +1,7 @@
+no 2 0 small cycle bicycle
+no 3 0 small cycle tricycle
+yes 2 0 small cycle motorcycle
+yes 4 2 small automobile sportsCar
+yes 4 3 medium automobile miniVan
+yes 4 4 medium automobile sedan
+yes 4 4 large automobile SUV

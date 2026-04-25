@@ -1,0 +1,6 @@
+discrete motor
+discrete num_wheels
+discrete num_doors
+discrete size
+discrete vehicleType
+discrete ClassField
