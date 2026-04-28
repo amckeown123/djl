@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="tensorflow/java/src/gen/java"/>
+	<classpathentry kind="src" path="tensorflow/tools/toolchains/java"/>
+	<classpathentry kind="src" path="tensorflow/lite/java/ovic/src/test/java"/>
+	<classpathentry kind="src" path="tensorflow/lite/java/ovic/demo/app"/>
+	<classpathentry kind="src" path="tensorflow/lite/java/demo/app/src/main"/>
+	<classpathentry kind="src" path="tensorflow/lite/java/ovic/src/main/java"/>
+	<classpathentry kind="src" path="tensorflow/lite/java/src/main/java"/>
+	<classpathentry kind="src" path="tensorflow/lite/java/src/testhelper/java"/>
+	<classpathentry kind="src" path="tensorflow/lite/java/src/test/java"/>
+	<classpathentry kind="src" path="tensorflow/java/src/main/java"/>
+	<classpathentry kind="src" path="tensorflow/java/src/test/java"/>
+	<classpathentry kind="src" path="tensorflow/java/src/test/resources"/>
+	<classpathentry kind="src" path="tensorflow/tools/android/inference_interface/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-21">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="tensorflow/tools/android/test/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
